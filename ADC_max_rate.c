@@ -58,7 +58,7 @@ void __ISR(_ADC_VECTOR, IPL6SRS) ADCHandler(void) { // interrupt every 8 samples
   }
   ++isr_counter;                       // increment ISR count
   if (isr_counter == LED_TOGGLE) {     // toggle LED every 1M ISRs (8M samples)
-    LATFINV = 0x02;
+    LATEINV = 0x02;
     isr_counter = 0;                   // reset ISR counter
   }
 
