@@ -29,7 +29,7 @@ void __ISR(_ADC_VECTOR, IPL6SRS) ADCHandler(void) { // interrupt every 8 samples
                                        // "static" means the variable maintains its value
                                        // in between function (ISR) calls 
 
-  if (isr_counter <= NUM_ISRS) {
+  if (isr_counter < NUM_ISRS) {
     isr_time[isr_counter] = TMR4;      // keep track of Timer45 time the ISR is entered
   }
 
@@ -66,7 +66,7 @@ void __ISR(_ADC_VECTOR, IPL6SRS) ADCHandler(void) { // interrupt every 8 samples
 }
 
 int main(void) {
-  int i, j = 0, ind = 0;      // variables used for indexing
+  uint32_t i, j = 0, ind = 0;      // variables used for indexing
   float tot_time = 0.0;           // time between 8 samples
   char msg[100] ={};              // buffer for writing messages to uart
   unsigned int prev_time = 0;     // used for calculating time differences
@@ -110,17 +110,15 @@ int main(void) {
     ;                             // wait until first NUM_SAMPS samples taken
   }
   IEC1bits.AD1IE = 0;             // disable ADC interrupt
+  
+
 
   sprintf(msg,"Values of %d analog reads\r\n",NUM_SAMPS);
   NU32_WriteUART3(msg);
-  NU32_WriteUART3("Sample #   Value   Voltage   Time");
-  sprintf(msg,"\r\n The trace, finally is : %5d ", trace[9]);
+  sprintf(msg,"Sample #    Value    Voltage     Time");
   NU32_WriteUART3(msg);
-  for (i = 0; i < 3; i++){
-      ;
-  }
-  /*
-   
+
+  
   for (i = 0; i < NUM_ISRS; ++i) {// write out NUM_SAMPS analog samples 
     for (j = 0; j < 8; ++j) {
       ind = i * 8 + j;            // compute the index of the current sample
@@ -137,7 +135,6 @@ int main(void) {
   NU32_WriteUART3("\r\n");
   IEC1bits.AD1IE = 1;         // enable ADC interrupt. won't print the information again,
                               // but you can see the light blinking
-   */
   while(1) {
     ;
   }
